@@ -1,0 +1,62 @@
+---
+title: "ordenes de servicio"
+author: "Niel Emerson vitorino Aroni"
+date: "2024-05-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Paso 1: Importar los datos de órdenes de servicio
+
+```{r}
+ordenesservi <- read.csv("ordenesservi.csv", row.names = NULL)
+```
+
+
+## Paso 2: Explorar y entender la estructura de los datos
+
+```{r}
+str(ordenesservi)
+summary(ordenesservi)
+
+
+```
+
+## Paso 3: Preprocesamiento de datos (si es necesario)
+
+```{r}
+ordenes_por_proveedor <- table(ordenesservi$NOMBRE_PROVEEDOR)
+
+df_ordenes <- data.frame(Nombre_Proveedor = names(ordenes_por_proveedor),
+                          Numero_Ordenes = as.numeric(ordenes_por_proveedor))
+str(df_ordenes)
+
+
+```
+
+## Paso 4: Filtrar datos y realizar consultas específicas
+
+```{r}
+ordenes_lima <- ordenesservi[ordenesservi$DEPARTAMENTO == "Lima", ]
+```
+
+## Paso 5: Resumen de órdenes por proveedor
+
+```{r}
+# Resumen de órdenes por proveedor
+proveedores <- table(ordenesservi$NOMBRE_PROVEEDOR)
+print(proveedores)
+```
+
+##concluciones 
+
+Exploración de Datos: Se comenzó por importar y explorar la estructura de los datos de órdenes de servicio. Se identificaron las variables clave disponibles, como el proveedor, el número de orden y otras características relevantes.
+
+Preprocesamiento de Datos: Se realizó un preprocesamiento de los datos, incluyendo el cálculo del número de órdenes por proveedor y la creación de un data frame (df_ordenes) para facilitar el análisis y la visualización.
+
+Análisis de Órdenes por Proveedor: Se utilizó un gráfico de barras para visualizar la cantidad de órdenes realizadas para cada proveedor. Este análisis proporcionó información sobre los proveedores más frecuentemente utilizados en el conjunto de datos.
+
+Implicaciones y Resultados: A partir del gráfico de barras, se observó que ciertos proveedores tenían un número significativamente mayor de órdenes en comparación con otros. Estos hallazgos podrían tener implicaciones importantes para la gestión de proveedores y la toma de decisiones en el proceso de adquisición de la organización.

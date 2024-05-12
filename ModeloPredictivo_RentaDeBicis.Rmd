@@ -1,0 +1,89 @@
+---
+title: <span style="color:pink">**Modelo Predictivo:** *Renta de Bicis*
+author: "DANIEL-SENATI"
+date: "2024-05-10"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: united
+    highlight: tango
+    code_download: true
+---
+
+<img src="/Users/InstructorL1/Downloads/bici.jpeg">  
+*Esta foto es obtenida del negocio de renta de bicis en Parque Fundidora, Monterrey. Por lo que se puede observar de primera mano como un negocio real puede usar lo visto a continuación* 
+
+
+### Paso 1. Importar archivo de renta de bicis en .csv
+
+```{r}
+#file.choose()
+
+#base_de_datos <- read.csv("/Users/elenavela/Downloads/rentadebicis.csv")
+```
+
+
+### Paso 2. Entender la base de datos
+Mediante el resumen podemos observar las variables que se tienen, así como ver la cantidad de registros y cambiar errores (en caso de detectar).
+```{r}
+resumen <- summary(rentadebicis)
+resumen
+
+plot(rentadebicis$temperatura,rentadebicis$rentas_totales,main="Influencia de la Temperatura sobre las Rentas", xlab="Temperatura (°C)",ylab="Cantidad de Rentas")
+
+```
+
+#### Herramienta: "El generador de valor de datos"
+***Paso 1.* Definir el área del negocio que buscamos impactar o mejorar y su KPI.**   
+Se busca impactar en el número de rentas, y mediante estas mismas se podrá ver si el plan de acción ha sido exitoso o no (KPI).  
+***Paso 2.* Seleccionar la plantilla (-s) para crear valor a partir de los datos de los clientes.**  
+El negocio tendrá en cuenta el indicador de rentas. El departamento de mercadotecnia tomará en cuenta las variables que más impactan para generar estrategias que impacten positivamente a las ventas.  
+***Vision***  | Segmentacion | Personalización | Contextualizacion  
+***Paso 3.* Generar ideas o conceptos específicos.**  
+Elaborar un modelo predictivo de las rentas de bicicletas.   
+***Paso 4.* Reunir los datos requeridos.**   
+Se tiene la base de datos de las variables que impactan a las rentas de bicicletas, mediante un modelo de regresión see observarán que variables impactan más a las rentas.   
+***Paso 5.* Plan de ejecucion.**  
+Mercadotecnia elaborará un plan, aprovechando las vaiables, para desplegar el modelo predictivo. Modelo piloto se aplicará cuando se tengan una mayor cantidad de variables pertinentes en el ambiente. 
+
+### Paso 3. Generar regresión lineal  
+
+En estadística, la regresión lineal o ajuste lineal es un modelo matemático usado para aproximar la relación de dependencia entre una variable dependiente Y (renta), y variables independientes X.
+
+```{r}
+regresion <- lm(rentas_totales ~ hora + dia + mes + año + estacion + dia_de_la_semana + asueto + temperatura + sensacion_termica + humedad + velocidad_del_viento, data=rentadebicis)
+summary(regresion)
+```
+
+
+### Paso 4. Evaluar, y en caso necesario, ajustar la regresion lineal
+
+```{r}
+regresion <- lm(rentas_totales ~ hora + mes + año + sensacion_termica + humedad + velocidad_del_viento, data=rentadebicis)
+regresion
+
+summary(regresion)
+```
+
+### Paso 5. Construir un modelo de prediccion
+
+Tomando en cuenta los resultados del modelo de regresión, obtenemos las variables que más impactan a las rentas totales, pudiendo realizar una predicción de las rentas. 
+
+```{r}
+datos_nuevos <- data.frame(hora=12, mes=1:12, año=2013, sensacion_termica=24, humedad=62, velocidad_del_viento=13)
+predict(regresion,datos_nuevos)
+```
+
+
+### Conclusiones
+La **regresión lineal** permite predecir el comportamiento de una variable a partir de otra. Esta herramienta puede ser de gran utilidad para negocios, debido a que permite conocer una predicción de ventas, rentas, ingresos, o cualquier variable que sea de interés para el usuario.  
+
+Considero que mediante este ejemplo se pueden llegar a ver las posibilidades que tiene la **regresión lineal**, como en este caso vimos una predicción de las rentas de los próximos 12 meses de este negocio.  
+
+Al haber visto clases de estadística anteriormente, puedo entender la gran utilidad y lo frecuente que es el uso de la **regresión lineal**; sin embargo, esta resulta la primera vez que lo hago de manera tan eficaz, como es aquí en R. 
+
+Tomando en cuenta lo que obtenemos de la **regresión lineal**, obtenemos que en los proximos 12 meses, las rentas totales habrán crecido. Todo esto viendo que la hora sean las *12:00*, en el año 2013, con una sensación térmica de 24, humedad de 62 y una velocidad del viento de 13. Al cumplirse, o parecerse lo más posible, estos datos, puede resultarr favorable para el negocio de la renta de bicicletas.   
+
+Esto mismo puede ser tomado en cuenta por el equipo de mercadotecnia, como fue indicado en la herramienta, ya que ellos tendrán la tarea de generar estrategias e ideas que potencialicen las rentas, principalmente tomando en cuenta los indicadores otorgados por la regresión lineal. 
+
