@@ -1,0 +1,66 @@
+---
+title: "Modelo predictibo sobre la renta de bicicletas"
+author: "Niel Emerson vitorino Aroni"
+date: "2024-05-12"
+output: html_document
+
+toc: true
+---
+
+## paso 1 importar el archivo rentadebicis.csv
+
+
+```{r}
+rentasdebicis <- read.csv("rentadebicis.csv")
+```
+## paso 2 entender la base de datos
+
+
+
+```{r}
+str(rentasdebicis)
+summary(rentasdebicis)
+
+plot(rentasdebicis$temperatura,rentasdebicis$rentas_totales, main = "infuencia de la temperatura sobre la renta", xlab = "Temperatura",ylab = "Renta" )
+```
+
+## paso 3 generar la regrecion lineal
+
+
+
+```{r}
+regrecion <- lm(rentas_totales ~ hora + dia + mes + ano + estacion + dia_de_la_semana + asueto + temperatura + sensacion_termica + humedad + velocidad_del_viento , data=rentasdebicis)
+summary(regrecion)
+```
+## paso 4 evaluar y en caso nesesario ajustar la regrecion lineal
+
+
+
+```{r}
+regrecion <- lm(rentas_totales ~ hora + dia + mes + ano  + sensacion_termica + humedad + velocidad_del_viento , data=rentasdebicis)
+summary(regrecion)
+```
+## paso 5 regrecion <- lm(rentas_totales ~ hora + dia + mes + ano  + sensacion_termica + humedad + velocidad_del_viento , data=rentasdebicis)
+
+
+
+```{r}
+summary(regrecion)
+datos2013 <- data.frame(
+  hora = 12,               # Mediodía
+  dia = 15,                # 15 del mes
+  mes = 1:12,                 # Junio
+  ano = 2013,              # Año 2013
+  estacion = 2,            # Supongamos que '2' representa Verano
+  dia_de_la_semana = 6,    # Supongamos que '6' representa Sábado
+  asueto = 0,              # Día no festivo
+  temperatura = 25,        # 25 grados Celsius
+  sensacion_termica = 26,  # 26 grados Celsius percibidos
+  humedad = 50,            # 50% de humedad
+  velocidad_del_viento = 10 # 10 km/h
+)
+
+prediccion2013 <- predict(regrecion, newdata = datos2013)
+print(prediccion2013)
+```
+
